@@ -4,12 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ngrokd - Forward Proxy Daemon for Private End-to-End Connectivity</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header>
     <nav class="container">
       <a href="#introduction" class="logo">ngrokd</a>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
       <ul class="nav-links">
         <li><a href="#introduction">Home</a></li>
         <li><a href="#prerequisites">Prerequisites</a></li>
@@ -22,13 +31,15 @@
 
   <main>
     <!-- Introduction -->
-    <section id="introduction" class="hero container">
-      <h1>ngrokd</h1>
-      <p class="tagline">Forward Proxy Daemon for Private End-to-End Connectivity</p>
-      <p>A standalone daemon that enables local and network applications to connect to private endpoints in ngrok's cloud via mTLS, without requiring a Kubernetes cluster.</p>
-      <div style="margin-top: 2rem;">
-        <a href="#installation" class="btn">Get Started</a>
-        <a href="https://github.com/ishanj12/ngrokd" class="btn btn-secondary" style="margin-left: 1rem;">View on GitHub</a>
+    <section id="introduction" class="hero">
+      <div class="container">
+        <h1>ngrokd <span class="version-badge">v0.3.0</span></h1>
+        <p class="tagline">Forward Proxy Daemon for Private End-to-End Connectivity</p>
+        <p>A standalone daemon that enables local and network applications to connect to private endpoints in ngrok's cloud via mTLS, without requiring a Kubernetes cluster.</p>
+        <div class="hero-actions">
+          <a href="#installation" class="btn">Get Started</a>
+          <a href="https://github.com/ishanj12/ngrokd" class="btn btn-secondary">View on GitHub</a>
+        </div>
       </div>
     </section>
 
@@ -37,37 +48,37 @@
       <p>ngrokd is a background daemon that:</p>
       <div class="feature-grid">
         <div class="feature-card">
-          <div class="feature-icon">🔍</div>
+          <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
           <h3>Auto-Discovery</h3>
           <p>Automatically discovers Kubernetes bound endpoints from ngrok API and reconciles dynamically every 30 seconds.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🌐</div>
+          <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
           <h3>Virtual Network Interfaces</h3>
           <p>Creates unique IPs per endpoint with automatic IP allocation and persistence across restarts.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">📝</div>
+          <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
           <h3>Automatic DNS</h3>
           <p>Manages /etc/hosts automatically - no manual DNS configuration needed.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🔐</div>
+          <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
           <h3>Secure mTLS</h3>
           <p>Forwards traffic securely via mTLS to ngrok cloud with automatic certificate provisioning.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🔄</div>
+          <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
           <h3>Auto Certificate Renewal</h3>
           <p>Automatically renews mTLS certificates before expiry. Manual renewal available via CLI.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">♻️</div>
+          <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M2 11.5a10 10 0 0 1 18.8-4.3"/><path d="M22 12.5a10 10 0 0 1-18.8 4.2"/></svg></div>
           <h3>Dynamic Reconciliation</h3>
           <p>Endpoints added or removed on-the-fly with automatic listener lifecycle management.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">💾</div>
+          <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
           <h3>State Persistence</h3>
           <p>Same hostname gets same IP/port across daemon restarts for consistency.</p>
         </div>
@@ -87,7 +98,7 @@
           <li>Give it a description (e.g., "ngrokd daemon")</li>
           <li>Copy the API key - you'll use it with <code>ngrokctl set-api-key</code></li>
         </ol>
-        <p style="margin-top: 1rem;"><em>The API key allows ngrokd to discover your bound endpoints and provision certificates.</em></p>
+        <p class="card-note"><em>The API key allows ngrokd to discover your bound endpoints and provision certificates.</em></p>
       </div>
 
       <div class="card">
@@ -104,7 +115,7 @@
           </li>
           <li>Click "Create Endpoint"</li>
         </ol>
-        <p style="margin-top: 1rem;"><em>ngrokd automatically discovers these endpoints and creates local access points for them.</em></p>
+        <p class="card-note"><em>ngrokd automatically discovers these endpoints and creates local access points for them.</em></p>
       </div>
     </section>
 
@@ -141,7 +152,7 @@
           </tr>
         </tbody>
       </table>
-      <p style="margin-top: 1rem;"><em>All platforms support both virtual mode (unique IPs) and network mode (port-based access).</em></p>
+      <p class="card-note"><em>All platforms support both virtual mode (unique IPs) and network mode (port-based access).</em></p>
     </section>
 
     <!-- Installation -->
@@ -294,7 +305,7 @@ Start-Process ngrokd -ArgumentList '--config=C:\ProgramData\ngrokd\config.yml' -
 ngrokctl list
 curl.exe http://your-endpoint/</code></pre>
 
-        <p style="margin-top: 1rem;"><strong>Note:</strong> ngrokd requires Administrator privileges to manage the hosts file and network adapters. See the <a href="https://github.com/ishanj12/ngrokd/blob/main/WINDOWS.md" target="_blank">Windows Guide</a> for details.</p>
+        <p class="card-note"><strong>Note:</strong> ngrokd requires Administrator privileges to manage the hosts file and network adapters. See the <a href="https://github.com/ishanj12/ngrokd/blob/main/WINDOWS.md" target="_blank">Windows Guide</a> for details.</p>
       </div>
 
       <div id="install-docker" class="tab-content">
@@ -310,7 +321,7 @@ curl.exe http://your-endpoint/</code></pre>
   -v ngrokd-data:/etc/ngrokd \
   ishanjain8108/ngrokd:latest</code></pre>
         
-        <p style="margin-top: 1rem;"><em><strong>Note:</strong> NET_ADMIN is only required for virtual mode (unique IPs). Network mode (<code>listen_interface: "0.0.0.0"</code>) does NOT require NET_ADMIN — simply remove <code>--cap-add=NET_ADMIN</code> and set <code>listen_interface: "0.0.0.0"</code> in your config.</em></p>
+        <p class="card-note"><em><strong>Note:</strong> NET_ADMIN is only required for virtual mode (unique IPs). Network mode (<code>listen_interface: "0.0.0.0"</code>) does NOT require NET_ADMIN — simply remove <code>--cap-add=NET_ADMIN</code> and set <code>listen_interface: "0.0.0.0"</code> in your config.</em></p>
 
         <h3>Verify</h3>
         <pre><code># Check status
@@ -340,7 +351,7 @@ curl http://localhost:9080/</code></pre>
 volumes:
   ngrokd-data:</code></pre>
 
-        <p style="margin-top: 1rem;">Start with:</p>
+        <p class="card-note">Start with:</p>
         <pre><code>NGROK_API_KEY=your_key docker compose up -d</code></pre>
 
         <h3>Edit Config in Container</h3>
@@ -510,19 +521,21 @@ docker exec -it ngrokd ngrokctl config edit
       <h2>Technical Details</h2>
 
       <h3>Architecture</h3>
-      <pre><code>Local Application
-    ↓ (resolves via /etc/hosts)
-Unique IP per Endpoint (virtual mode)
-    ↓ (daemon listener)
-Host Header Rewrite (rewrites Host to endpoint hostname for compatibility)
-    ↓
-mTLS Connection
-    ↓
-kubernetes-binding-ingress.ngrok.io
-    ↓
-Bound Endpoint (ngrok cloud)
-    ↓
-Your Backend Service</code></pre>
+      <div class="arch-flow">
+        <div class="arch-step">Local Application</div>
+        <div class="arch-arrow">resolves via /etc/hosts</div>
+        <div class="arch-step">Unique IP per Endpoint <span>(virtual mode)</span></div>
+        <div class="arch-arrow">daemon listener</div>
+        <div class="arch-step">Host Header Rewrite <span>(rewrites Host to endpoint hostname for compatibility)</span></div>
+        <div class="arch-arrow"></div>
+        <div class="arch-step">mTLS Connection</div>
+        <div class="arch-arrow"></div>
+        <div class="arch-step">kubernetes-binding-ingress.ngrok.io</div>
+        <div class="arch-arrow"></div>
+        <div class="arch-step">Bound Endpoint <span>(ngrok cloud)</span></div>
+        <div class="arch-arrow"></div>
+        <div class="arch-step">Your Backend Service</div>
+      </div>
 
       <h3>How It Works</h3>
       
@@ -755,7 +768,7 @@ docker exec ngrokd ip addr show</code></pre>
   <footer>
     <div class="container">
       <p>ngrokd v0.3.0 | Based on the ngrok Kubernetes Operator connection protocol</p>
-      <p style="margin-top: 0.5rem;"><a href="https://github.com/ishanj12/ngrokd">GitHub</a> | <a href="https://hub.docker.com/r/ishanjain8108/ngrokd">Docker Hub</a></p>
+      <p class="footer-links"><a href="https://github.com/ishanj12/ngrokd">GitHub</a> | <a href="https://hub.docker.com/r/ishanjain8108/ngrokd">Docker Hub</a></p>
     </div>
   </footer>
 
