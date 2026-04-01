@@ -510,6 +510,51 @@ docker exec -it ngrokd ngrokctl config edit
 # Endpoints are rebound if listen_interface changes</code></pre>
     </section>
 
+    <!-- CLI Reference -->
+    <section class="container section">
+      <h2>CLI Reference</h2>
+
+      <h3>ngrokctl Commands</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>ngrokctl status</code></td>
+            <td>Check daemon registration status</td>
+          </tr>
+          <tr>
+            <td><code>ngrokctl list</code></td>
+            <td>List discovered endpoints</td>
+          </tr>
+          <tr>
+            <td><code>ngrokctl health</code></td>
+            <td>Detailed health information</td>
+          </tr>
+          <tr>
+            <td><code>ngrokctl set-api-key KEY</code></td>
+            <td>Set ngrok API key</td>
+          </tr>
+          <tr>
+            <td><code>ngrokctl config edit</code></td>
+            <td>Edit configuration file</td>
+          </tr>
+          <tr>
+            <td><code>ngrokctl refresh-cert</code></td>
+            <td>Check and renew certificate if expiring</td>
+          </tr>
+          <tr>
+            <td><code>ngrokctl refresh-cert --force</code></td>
+            <td>Force immediate certificate renewal</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <!-- Technical Details -->
     <section id="technical" class="container section">
       <h2>Technical Details</h2>
@@ -686,50 +731,6 @@ docker exec ngrokd ip addr show</code></pre>
     </section>
 
     <!-- CLI Reference -->
-    <section class="container section">
-      <h2>CLI Reference</h2>
-
-      <h3>ngrokctl Commands</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Command</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>ngrokctl status</code></td>
-            <td>Check daemon registration status</td>
-          </tr>
-          <tr>
-            <td><code>ngrokctl list</code></td>
-            <td>List discovered endpoints</td>
-          </tr>
-          <tr>
-            <td><code>ngrokctl health</code></td>
-            <td>Detailed health information</td>
-          </tr>
-          <tr>
-            <td><code>ngrokctl set-api-key KEY</code></td>
-            <td>Set ngrok API key</td>
-          </tr>
-          <tr>
-            <td><code>ngrokctl config edit</code></td>
-            <td>Edit configuration file</td>
-          </tr>
-          <tr>
-            <td><code>ngrokctl refresh-cert</code></td>
-            <td>Check and renew certificate if expiring</td>
-          </tr>
-          <tr>
-            <td><code>ngrokctl refresh-cert --force</code></td>
-            <td>Force immediate certificate renewal</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
     <!-- Requirements -->
     <section class="container section">
       <h2>Requirements</h2>
