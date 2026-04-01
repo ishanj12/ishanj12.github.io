@@ -514,23 +514,6 @@ docker exec -it ngrokd ngrokctl config edit
     <section id="technical" class="container section">
       <h2>Technical Details</h2>
 
-      <h3>Architecture</h3>
-      <div class="arch-flow">
-        <div class="arch-step">Local Application</div>
-        <div class="arch-arrow">resolves via /etc/hosts</div>
-        <div class="arch-step">Unique IP per Endpoint <span>(virtual mode)</span></div>
-        <div class="arch-arrow">daemon listener</div>
-        <div class="arch-step">Host Header Rewrite <span>(rewrites Host to endpoint hostname for compatibility)</span></div>
-        <div class="arch-arrow"></div>
-        <div class="arch-step">mTLS Connection</div>
-        <div class="arch-arrow"></div>
-        <div class="arch-step">kubernetes-binding-ingress.ngrok.io</div>
-        <div class="arch-arrow"></div>
-        <div class="arch-step">Bound Endpoint <span>(ngrok cloud)</span></div>
-        <div class="arch-arrow"></div>
-        <div class="arch-step">Your Backend Service</div>
-      </div>
-
       <h3>How It Works</h3>
       
       <div class="card">
