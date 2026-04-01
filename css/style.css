@@ -250,7 +250,8 @@ pre code {
   content: "";
   z-index: -1;
   background-image: conic-gradient(from var(--degree), #fcd34d, #bef264, #6ee7b7, #7dd3fc, #d8b4fe, #fda4af, #fcd34d);
-  filter: blur(6px);
+  filter: blur(8px);
+  opacity: 0.4;
   border-radius: var(--radius-full);
   animation: 3s linear infinite rotate;
   position: absolute;
