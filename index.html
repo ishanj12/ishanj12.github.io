@@ -169,6 +169,11 @@
         <h3>Quick Install (Recommended)</h3>
         <pre><code>curl -fsSL https://raw.githubusercontent.com/ishanj12/ngrokd/main/install.sh | sudo bash</code></pre>
         
+        <h3>Build from Source</h3>
+        <pre><code>git clone https://github.com/ishanj12/ngrokd.git
+cd ngrokd
+make install    # builds + installs to /usr/local/bin + sets up system service</code></pre>
+
         <h3>Download Pre-built Binaries</h3>
         <pre><code># Apple Silicon
 curl -LO https://github.com/ishanj12/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-darwin-arm64.tar.gz
@@ -183,8 +188,7 @@ cd ngrokd-v0.3.6-darwin-amd64
 sudo ./install.sh</code></pre>
 
         <h3>Start Daemon</h3>
-        <pre><code># Install as system service (recommended)
-sudo ngrokd install
+        <pre><code># Start the service (already set up by make install or install.sh)
 sudo ngrokd start
 
 # Check status
@@ -209,6 +213,11 @@ curl http://your-endpoint/</code></pre>
         <h3>Quick Install (Recommended)</h3>
         <pre><code>curl -fsSL https://raw.githubusercontent.com/ishanj12/ngrokd/main/install.sh | sudo bash</code></pre>
         
+        <h3>Build from Source</h3>
+        <pre><code>git clone https://github.com/ishanj12/ngrokd.git
+cd ngrokd
+make install    # builds + installs to /usr/local/bin + sets up systemd service</code></pre>
+
         <h3>Download Pre-built Binaries</h3>
         <pre><code># AMD64
 curl -LO https://github.com/ishanj12/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-linux-amd64.tar.gz
@@ -223,8 +232,7 @@ cd ngrokd-v0.3.6-linux-arm64
 sudo ./install.sh</code></pre>
 
         <h3>Start Daemon</h3>
-        <pre><code># Install as system service (recommended - sets up systemd automatically)
-sudo ngrokd install
+        <pre><code># Start the service (already set up by make install or install.sh)
 sudo ngrokd start
 
 # Check status
