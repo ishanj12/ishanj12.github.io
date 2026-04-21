@@ -183,11 +183,18 @@ cd ngrokd-v0.3.6-darwin-amd64
 sudo ./install.sh</code></pre>
 
         <h3>Start Daemon</h3>
-        <pre><code># Background mode (recommended)
-sudo nohup ngrokd --config=/etc/ngrokd/config.yml > ~/ngrokd.log 2>&1 &
+        <pre><code># Install as system service (recommended)
+sudo ngrokd install
+sudo ngrokd start
 
-# Foreground mode (for debugging)
-sudo ngrokd --config=/etc/ngrokd/config.yml</code></pre>
+# Check status
+sudo ngrokd status
+
+# View logs
+tail -f /var/log/ngrokd.log
+
+# Or run in foreground (for debugging)
+sudo ngrokd run --config=/etc/ngrokd/config.yml</code></pre>
 
         <h3>Set API Key</h3>
         <pre><code>ngrokctl set-api-key YOUR_NGROK_API_KEY</code></pre>
@@ -216,28 +223,18 @@ cd ngrokd-v0.3.6-linux-arm64
 sudo ./install.sh</code></pre>
 
         <h3>Start Daemon</h3>
-        <pre><code># Background mode (recommended)
-sudo nohup ngrokd --config=/etc/ngrokd/config.yml > ~/ngrokd.log 2>&1 &
+        <pre><code># Install as system service (recommended - sets up systemd automatically)
+sudo ngrokd install
+sudo ngrokd start
 
-# Or use systemd
-sudo tee /etc/systemd/system/ngrokd.service << 'EOF'
-[Unit]
-Description=ngrokd Forward Proxy Daemon
-After=network.target
+# Check status
+sudo ngrokd status
 
-[Service]
-Type=simple
-ExecStart=/usr/local/bin/ngrokd --config=/etc/ngrokd/config.yml
-Restart=always
-User=root
+# View logs
+journalctl -u ngrokd -f
 
-[Install]
-WantedBy=multi-user.target
-EOF
-
-sudo systemctl daemon-reload
-sudo systemctl enable ngrokd
-sudo systemctl start ngrokd</code></pre>
+# Or run in foreground (for debugging)
+sudo ngrokd run --config=/etc/ngrokd/config.yml</code></pre>
 
         <h3>Set API Key</h3>
         <pre><code>ngrokctl set-api-key YOUR_NGROK_API_KEY</code></pre>
@@ -311,7 +308,19 @@ curl.exe http://your-endpoint/</code></pre>
         <h3>Pull Image</h3>
         <pre><code>docker pull ishanjain8108/ngrokd:latest</code></pre>
 
-        <h3>Run Container</h3>
+        <h3>Run Container (Network Mode — Recommended)</h3>
+        <pre><code>docker run -d \
+  --name ngrokd \
+  -e NGROK_API_KEY=your_api_key \
+  -p 80:80 \
+  -p 443:443 \
+  -p 53:53/udp \
+  -p 53:53/tcp \
+  -v ngrokd-data:/etc/ngrokd \
+  ishanjain8108/ngrokd:latest</code></pre>
+        <p style="margin-top: 0.5rem;"><em>Set <code>listen_interface: "0.0.0.0"</code> in config. No NET_ADMIN needed. Endpoints share ports 80/443 via SNI/Host routing. DNS on port 53 resolves managed hostnames.</em></p>
+
+        <h3>Run Container (Virtual Mode)</h3>
         <pre><code>docker run -d \
   --name ngrokd \
   --cap-add=NET_ADMIN \
@@ -319,8 +328,7 @@ curl.exe http://your-endpoint/</code></pre>
   -p 9080-9100:9080-9100 \
   -v ngrokd-data:/etc/ngrokd \
   ishanjain8108/ngrokd:latest</code></pre>
-        
-        <p style="margin-top: 1rem;"><em><strong>Note:</strong> NET_ADMIN is only required for virtual mode (unique IPs). Network mode (<code>listen_interface: "0.0.0.0"</code>) does NOT require NET_ADMIN — simply remove <code>--cap-add=NET_ADMIN</code> and set <code>listen_interface: "0.0.0.0"</code> in your config.</em></p>
+        <p style="margin-top: 0.5rem;"><em>Virtual mode requires NET_ADMIN for unique IP creation. Uses remapped port range.</em></p>
 
         <h3>Verify</h3>
         <pre><code># Check status
@@ -329,7 +337,10 @@ docker exec ngrokd ngrokctl status
 # List endpoints (wait ~30s first)
 docker exec ngrokd ngrokctl list
 
-# Test endpoint
+# Test endpoint (network mode)
+curl --resolve your-endpoint:80:localhost http://your-endpoint/
+
+# Test endpoint (virtual mode)
 curl http://localhost:9080/</code></pre>
 
         <h3>Using Docker Compose</h3>
@@ -337,20 +348,21 @@ curl http://localhost:9080/</code></pre>
   ngrokd:
     image: ishanjain8108/ngrokd:latest
     container_name: ngrokd
-    cap_add:
-      - NET_ADMIN
     environment:
       - NGROK_API_KEY=${NGROK_API_KEY}
     ports:
-      - "9080-9100:9080-9100"
+      - "80:80"
+      - "443:443"
+      - "53:53/udp"
+      - "53:53/tcp"
     volumes:
       - ngrokd-data:/etc/ngrokd
     restart: unless-stopped
 
 volumes:
   ngrokd-data:</code></pre>
-
-        <p style="margin-top: 1rem;">Start with:</p>
+        
+        <p>Start with:</p>
         <pre><code>NGROK_API_KEY=your_key docker compose up -d</code></pre>
 
         <h3>Edit Config in Container</h3>
@@ -445,9 +457,15 @@ bound_endpoints:
 net:
   interface_name: ngrokd0
   subnet: 10.107.0.0/16
-  listen_interface: "virtual"
+  listen_interface: "virtual"  # or "0.0.0.0", "eth0", specific IP
   start_port: 9080
-  overrides: {}        # Per-endpoint overrides</code></pre>
+  overrides: {}        # Per-endpoint overrides
+
+dns:
+  enabled: false         # Auto-enabled in network mode
+  listen: ""             # Auto-detected (LAN IP:53 in network mode)
+  upstream: []           # Auto-detected from resolv.conf
+  manage_resolv_conf: false  # Linux: prepend to /etc/resolv.conf</code></pre>
 
       <h3>Configuration Options</h3>
       <table>
