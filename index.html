@@ -499,6 +499,26 @@ net:
             <td>Per-endpoint listen_interface overrides</td>
             <td>{}</td>
           </tr>
+          <tr>
+            <td><code>dns.enabled</code></td>
+            <td>Enable DNS server (auto-enabled in network mode)</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td><code>dns.listen</code></td>
+            <td>DNS server listen address (auto-detected if empty)</td>
+            <td>""</td>
+          </tr>
+          <tr>
+            <td><code>dns.upstream</code></td>
+            <td>Upstream DNS servers for passthrough queries</td>
+            <td>auto-detected</td>
+          </tr>
+          <tr>
+            <td><code>dns.manage_resolv_conf</code></td>
+            <td>Linux: prepend ngrokd to /etc/resolv.conf</td>
+            <td>false</td>
+          </tr>
         </tbody>
       </table>
 
@@ -559,7 +579,30 @@ docker exec -it ngrokd ngrokctl config edit
 127.0.0.2    api.example.com
 127.0.0.3    web.example.com
 # END ngrokd managed section</code></pre>
-        <p style="margin-top: 1rem;"><strong>Network mode:</strong> Runs a built-in DNS server that resolves all managed hostnames to the LAN IP. External clients point their DNS at the ngrokd machine. Per-domain routing configured automatically (macOS: /etc/resolver/, Linux: resolvectl or resolv.conf).</p>
+        <p style="margin-top: 1rem;"><strong>Network mode:</strong> Runs a built-in DNS server that resolves all managed hostnames to the LAN IP. External clients point their DNS at the ngrokd machine.</p>
+      </div>
+
+      <div class="card">
+        <h4>3a. DNS Resolver Details (Network Mode)</h4>
+        <p>ngrokd runs a lightweight DNS server that handles two types of queries:</p>
+        <ul>
+          <li><strong>Managed hostnames</strong> (exact and wildcard endpoints): Responds with the ngrokd machine's LAN IP</li>
+          <li><strong>All other queries</strong>: Forwards (passes through) to upstream DNS servers (auto-detected from resolv.conf, or 8.8.8.8/1.1.1.1 as fallback)</li>
+        </ul>
+        <p style="margin-top: 1rem;">This means external clients can use ngrokd as their <strong>sole DNS server</strong> — managed hostnames resolve to ngrokd, and everything else (google.com, etc.) passes through to upstream DNS as normal.</p>
+        <p style="margin-top: 1rem;"><strong>OS integration:</strong></p>
+        <ul>
+          <li><strong>macOS:</strong> Creates per-domain resolver files in <code>/etc/resolver/</code> (e.g., <code>/etc/resolver/example.com</code>) — only managed domains are routed to ngrokd, global DNS is untouched</li>
+          <li><strong>Linux (systemd-resolved):</strong> Uses <code>resolvectl</code> for per-domain split DNS routing</li>
+          <li><strong>Linux (fallback):</strong> Prepends ngrokd's nameserver to <code>/etc/resolv.conf</code> (with automatic backup/restore)</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>DNS configuration options:</strong></p>
+        <pre><code>dns:
+  enabled: false        # Auto-enabled in network mode
+  listen: ""            # Auto-detected (LAN IP:53 in network mode)
+  upstream: []           # Auto-detected from resolv.conf
+  manage_resolv_conf: false  # Linux: prepend to /etc/resolv.conf</code></pre>
+        <p style="margin-top: 1rem;"><strong>Bind address priority:</strong> Explicit <code>dns.listen</code> → LAN IP:53 (network mode) → 127.0.0.1:53 → 127.0.0.2-10:53 (fallback if port 53 busy)</p>
       </div>
 
       <div class="card">
@@ -713,6 +756,47 @@ docker exec ngrokd ip addr show</code></pre>
     <!-- CLI Reference -->
     <section class="container section">
       <h2>CLI Reference</h2>
+
+      <h3>ngrokd Service Commands</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>sudo ngrokd install</code></td>
+            <td>Install ngrokd as a system service (launchd on macOS, systemd on Linux) and copy binary to /usr/local/bin</td>
+          </tr>
+          <tr>
+            <td><code>sudo ngrokd uninstall</code></td>
+            <td>Remove the system service and clean up</td>
+          </tr>
+          <tr>
+            <td><code>sudo ngrokd start</code></td>
+            <td>Start the daemon service</td>
+          </tr>
+          <tr>
+            <td><code>sudo ngrokd stop</code></td>
+            <td>Stop the daemon service</td>
+          </tr>
+          <tr>
+            <td><code>sudo ngrokd restart</code></td>
+            <td>Stop and restart the daemon service</td>
+          </tr>
+          <tr>
+            <td><code>sudo ngrokd status</code></td>
+            <td>Check if the daemon service is running</td>
+          </tr>
+          <tr>
+            <td><code>sudo ngrokd run --config=PATH</code></td>
+            <td>Run the daemon in foreground mode (for debugging)</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 1rem;"><em>Note: <code>ngrokd restart</code> does not reinstall the binary. After rebuilding, run <code>sudo ngrokd install</code> to copy the new binary before restarting.</em></p>
 
       <h3>ngrokctl Commands</h3>
       <table>
