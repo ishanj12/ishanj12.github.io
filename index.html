@@ -316,27 +316,31 @@ curl.exe http://your-endpoint/</code></pre>
         <h3>Pull Image</h3>
         <pre><code>docker pull ishanjain8108/ngrokd:latest</code></pre>
 
-        <h3>Run Container (Network Mode — Recommended)</h3>
-        <pre><code>docker run -d \
-  --name ngrokd \
-  -e NGROK_API_KEY=your_api_key \
-  -p 80:80 \
-  -p 443:443 \
-  -p 53:53/udp \
-  -p 53:53/tcp \
-  -v ngrokd-data:/etc/ngrokd \
-  ishanjain8108/ngrokd:latest</code></pre>
-        <p style="margin-top: 0.5rem;"><em>Set <code>listen_interface: "0.0.0.0"</code> in config. No NET_ADMIN needed. Endpoints share ports 80/443 via SNI/Host routing. DNS on port 53 resolves managed hostnames.</em></p>
-
-        <h3>Run Container (Virtual Mode)</h3>
+        <h3>Run Container (Network Mode)</h3>
+        <p>Endpoints share ports 80/443 via SNI/Host header routing. Built-in DNS server resolves managed hostnames inside the container.</p>
         <pre><code>docker run -d \
   --name ngrokd \
   --cap-add=NET_ADMIN \
   -e NGROK_API_KEY=your_api_key \
+  -p 8081:8081 \
+  -p 80:80 \
+  -p 443:443 \
   -p 9080-9100:9080-9100 \
   -v ngrokd-data:/etc/ngrokd \
   ishanjain8108/ngrokd:latest</code></pre>
-        <p style="margin-top: 0.5rem;"><em>Virtual mode requires NET_ADMIN for unique IP creation. Uses remapped port range.</em></p>
+        <p style="margin-top: 0.5rem;"><em>Set <code>listen_interface: "0.0.0.0"</code> in config. Ports 80/443 are for shared listeners, 9080+ for non-standard port endpoints. If 80/443 conflict on host, remap: <code>-p 8080:80 -p 8443:443</code></em></p>
+
+        <h3>Run Container (Virtual Mode)</h3>
+        <p>Each endpoint gets a unique IP inside the container. Only accessible from within the container.</p>
+        <pre><code>docker run -d \
+  --name ngrokd \
+  --cap-add=NET_ADMIN \
+  -e NGROK_API_KEY=your_api_key \
+  -p 8081:8081 \
+  -p 9080-9100:9080-9100 \
+  -v ngrokd-data:/etc/ngrokd \
+  ishanjain8108/ngrokd:latest</code></pre>
+        <p style="margin-top: 0.5rem;"><em>Virtual mode requires NET_ADMIN for interface/IP creation. Virtual IPs only exist inside the container — use network mode for host access.</em></p>
 
         <h3>Verify</h3>
         <pre><code># Check status
@@ -345,24 +349,26 @@ docker exec ngrokd ngrokctl status
 # List endpoints (wait ~30s first)
 docker exec ngrokd ngrokctl list
 
-# Test endpoint (network mode)
-curl --resolve your-endpoint:80:localhost http://your-endpoint/
+# Test endpoint (network mode — use Host header)
+curl -H "Host: your-endpoint" http://localhost:80/
 
-# Test endpoint (virtual mode)
-curl http://localhost:9080/</code></pre>
+# Health check
+curl http://localhost:8081/health</code></pre>
 
         <h3>Using Docker Compose</h3>
         <pre><code>services:
   ngrokd:
     image: ishanjain8108/ngrokd:latest
     container_name: ngrokd
+    cap_add:
+      - NET_ADMIN
     environment:
       - NGROK_API_KEY=${NGROK_API_KEY}
     ports:
+      - "8081:8081"
       - "80:80"
       - "443:443"
-      - "53:53/udp"
-      - "53:53/tcp"
+      - "9080-9100:9080-9100"
     volumes:
       - ngrokd-data:/etc/ngrokd
     restart: unless-stopped
@@ -726,7 +732,7 @@ docker exec -it ngrokd ngrokctl config edit
       <div class="card">
         <h3>Docker: Can't Access Endpoints from Host</h3>
         <p><strong>Issue:</strong> Using virtual mode, virtual IPs only exist inside container</p>
-        <p><strong>Solution:</strong> Use <code>listen_interface: "0.0.0.0"</code> for Docker</p>
+        <p><strong>Solution:</strong> Use <code>listen_interface: "0.0.0.0"</code> (network mode) and expose ports 80/443</p>
         <pre><code># Edit config
 docker exec -it ngrokd ngrokctl config edit
 
@@ -736,8 +742,9 @@ listen_interface: "0.0.0.0"
 # Wait ~5s for reload
 docker exec ngrokd ngrokctl list
 
-# Access from host
-curl http://localhost:9080/</code></pre>
+# Access from host (use Host header for shared listener)
+curl -H "Host: your-endpoint" http://localhost:80/</code></pre>
+        <p style="margin-top: 0.5rem;"><em>Make sure the container was started with <code>-p 80:80 -p 443:443</code>. If those ports conflict, remap: <code>-p 8080:80 -p 8443:443</code></em></p>
       </div>
 
       <div class="card">
