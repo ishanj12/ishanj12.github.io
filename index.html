@@ -349,8 +349,8 @@ docker exec ngrokd ngrokctl status
 # List endpoints (wait ~30s first)
 docker exec ngrokd ngrokctl list
 
-# Test endpoint (network mode — use Host header)
-curl -H "Host: your-endpoint" http://localhost:80/
+# Test endpoint
+docker exec ngrokd curl http://your-endpoint/
 
 # Health check
 curl http://localhost:8081/health</code></pre>
