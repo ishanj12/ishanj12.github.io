@@ -28,7 +28,7 @@
       <p>A standalone daemon that enables local and network applications to connect to private endpoints in ngrok's cloud via mTLS, without requiring a Kubernetes cluster.</p>
       <div style="margin-top: 2rem;">
         <a href="#installation" class="btn">Get Started</a>
-        <a href="https://github.com/ishanj12/ngrokd" class="btn btn-secondary" style="margin-left: 1rem;">View on GitHub</a>
+        <a href="https://github.com/ngrok/ngrokd" class="btn btn-secondary" style="margin-left: 1rem;">View on GitHub</a>
       </div>
     </section>
 
@@ -167,22 +167,22 @@
 
       <div id="install-macos" class="tab-content">
         <h3>Quick Install (Recommended)</h3>
-        <pre><code>curl -fsSL https://raw.githubusercontent.com/ishanj12/ngrokd/main/install.sh | sudo bash</code></pre>
+        <pre><code>curl -fsSL https://raw.githubusercontent.com/ngrok/ngrokd/main/install.sh | sudo bash</code></pre>
         
         <h3>Build from Source</h3>
-        <pre><code>git clone https://github.com/ishanj12/ngrokd.git
+        <pre><code>git clone https://github.com/ngrok/ngrokd.git
 cd ngrokd
 make install    # builds + installs to /usr/local/bin + sets up system service</code></pre>
 
         <h3>Download Pre-built Binaries</h3>
         <pre><code># Apple Silicon
-curl -LO https://github.com/ishanj12/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-darwin-arm64.tar.gz
+curl -LO https://github.com/ngrok/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-darwin-arm64.tar.gz
 tar xzf ngrokd-v0.3.6-darwin-arm64.tar.gz
 cd ngrokd-v0.3.6-darwin-arm64
 sudo ./install.sh
 
 # Intel Mac
-curl -LO https://github.com/ishanj12/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-darwin-amd64.tar.gz
+curl -LO https://github.com/ngrok/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-darwin-amd64.tar.gz
 tar xzf ngrokd-v0.3.6-darwin-amd64.tar.gz
 cd ngrokd-v0.3.6-darwin-amd64
 sudo ./install.sh</code></pre>
@@ -211,22 +211,22 @@ curl http://your-endpoint/</code></pre>
 
       <div id="install-linux" class="tab-content">
         <h3>Quick Install (Recommended)</h3>
-        <pre><code>curl -fsSL https://raw.githubusercontent.com/ishanj12/ngrokd/main/install.sh | sudo bash</code></pre>
+        <pre><code>curl -fsSL https://raw.githubusercontent.com/ngrok/ngrokd/main/install.sh | sudo bash</code></pre>
         
         <h3>Build from Source</h3>
-        <pre><code>git clone https://github.com/ishanj12/ngrokd.git
+        <pre><code>git clone https://github.com/ngrok/ngrokd.git
 cd ngrokd
 make install    # builds + installs to /usr/local/bin + sets up systemd service</code></pre>
 
         <h3>Download Pre-built Binaries</h3>
         <pre><code># AMD64
-curl -LO https://github.com/ishanj12/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-linux-amd64.tar.gz
+curl -LO https://github.com/ngrok/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-linux-amd64.tar.gz
 tar xzf ngrokd-v0.3.6-linux-amd64.tar.gz
 cd ngrokd-v0.3.6-linux-amd64
 sudo ./install.sh
 
 # ARM64
-curl -LO https://github.com/ishanj12/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-linux-arm64.tar.gz
+curl -LO https://github.com/ngrok/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-linux-arm64.tar.gz
 tar xzf ngrokd-v0.3.6-linux-arm64.tar.gz
 cd ngrokd-v0.3.6-linux-arm64
 sudo ./install.sh</code></pre>
@@ -258,7 +258,7 @@ curl http://your-endpoint/</code></pre>
         <p><strong>Run PowerShell as Administrator</strong></p>
         
         <p><strong>1. Download and extract:</strong></p>
-        <pre><code>iwr https://github.com/ishanj12/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-windows-amd64.tar.gz -OutFile ngrokd.tar.gz
+        <pre><code>iwr https://github.com/ngrok/ngrokd/releases/download/v0.3.6/ngrokd-v0.3.6-windows-amd64.tar.gz -OutFile ngrokd.tar.gz
 tar -xzf ngrokd.tar.gz
 cd ngrokd-v0.3.6-windows-amd64</code></pre>
 
@@ -309,12 +309,12 @@ Start-Process ngrokd -ArgumentList '--config=C:\ProgramData\ngrokd\config.yml' -
 ngrokctl list
 curl.exe http://your-endpoint/</code></pre>
 
-        <p style="margin-top: 1rem;"><strong>Note:</strong> ngrokd requires Administrator privileges to manage the hosts file and network adapters. See the <a href="https://github.com/ishanj12/ngrokd/blob/main/WINDOWS.md" target="_blank">Windows Guide</a> for details.</p>
+        <p style="margin-top: 1rem;"><strong>Note:</strong> ngrokd requires Administrator privileges to manage the hosts file and network adapters. See the <a href="https://github.com/ngrok/ngrokd/blob/main/WINDOWS.md" target="_blank">Windows Guide</a> for details.</p>
       </div>
 
       <div id="install-docker" class="tab-content">
         <h3>Pull Image</h3>
-        <pre><code>docker pull ishanjain8108/ngrokd:latest</code></pre>
+        <pre><code>docker pull ngrok/ngrokd:latest</code></pre>
 
         <h3>Run Container (Network Mode)</h3>
         <p>Endpoints share ports 80/443 via SNI/Host header routing. Built-in DNS server resolves managed hostnames inside the container.</p>
@@ -327,7 +327,7 @@ curl.exe http://your-endpoint/</code></pre>
   -p 443:443 \
   -p 9080-9100:9080-9100 \
   -v ngrokd-data:/etc/ngrokd \
-  ishanjain8108/ngrokd:latest</code></pre>
+  ngrok/ngrokd:latest</code></pre>
         <p style="margin-top: 0.5rem;"><em>Set <code>listen_interface: "0.0.0.0"</code> in config. Ports 80/443 are for shared listeners, 9080+ for non-standard port endpoints. If 80/443 conflict on host, remap: <code>-p 8080:80 -p 8443:443</code></em></p>
 
         <h3>Run Container (Virtual Mode)</h3>
@@ -339,7 +339,7 @@ curl.exe http://your-endpoint/</code></pre>
   -p 8081:8081 \
   -p 9080-9100:9080-9100 \
   -v ngrokd-data:/etc/ngrokd \
-  ishanjain8108/ngrokd:latest</code></pre>
+  ngrok/ngrokd:latest</code></pre>
         <p style="margin-top: 0.5rem;"><em>Virtual mode requires NET_ADMIN for interface/IP creation. Virtual IPs only exist inside the container — use network mode for host access.</em></p>
 
         <h3>Verify</h3>
@@ -358,7 +358,7 @@ curl http://localhost:8081/health</code></pre>
         <h3>Using Docker Compose</h3>
         <pre><code>services:
   ngrokd:
-    image: ishanjain8108/ngrokd:latest
+    image: ngrok/ngrokd:latest
     container_name: ngrokd
     cap_add:
       - NET_ADMIN
@@ -887,7 +887,7 @@ docker exec ngrokd ip addr show</code></pre>
   <footer>
     <div class="container">
       <p>ngrokd v0.3.6 | Based on the ngrok Kubernetes Operator connection protocol</p>
-      <p style="margin-top: 0.5rem;"><a href="https://github.com/ishanj12/ngrokd">GitHub</a> | <a href="https://hub.docker.com/r/ishanjain8108/ngrokd">Docker Hub</a></p>
+      <p style="margin-top: 0.5rem;"><a href="https://github.com/ngrok/ngrokd">GitHub</a> | <a href="https://hub.docker.com/r/ngrok/ngrokd">Docker Hub</a></p>
     </div>
   </footer>
 
