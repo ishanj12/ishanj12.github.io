@@ -331,16 +331,14 @@ curl.exe http://your-endpoint/</code></pre>
         <p style="margin-top: 0.5rem;"><em>Set <code>listen_interface: "0.0.0.0"</code> in config. Ports 80/443 are for shared listeners, 9080+ for non-standard port endpoints. If 80/443 conflict on host, remap: <code>-p 8080:80 -p 8443:443</code></em></p>
 
         <h3>Run Container (Virtual Mode)</h3>
-        <p>Each endpoint gets a unique IP inside the container. Only accessible from within the container.</p>
+        <p>Each endpoint gets a unique IP inside the container. Ideal for CI/CD (e.g., CircleCI Docker executors) where processes inside the container need to reach endpoints directly.</p>
         <pre><code>docker run -d \
   --name ngrokd \
   --cap-add=NET_ADMIN \
   -e NGROK_API_KEY=your_api_key \
-  -p 8081:8081 \
-  -p 9080-9100:9080-9100 \
   -v ngrokd-data:/etc/ngrokd \
   ngrok/ngrokd:latest</code></pre>
-        <p style="margin-top: 0.5rem;"><em>Virtual mode requires NET_ADMIN for interface/IP creation. Virtual IPs only exist inside the container — use network mode for host access.</em></p>
+        <p style="margin-top: 0.5rem;"><em>Virtual mode requires NET_ADMIN for interface/IP creation. Virtual IPs only exist inside the container — no port mappings needed. Use network mode if you need access from the host or other machines.</em></p>
 
         <h3>Verify</h3>
         <pre><code># Check status
