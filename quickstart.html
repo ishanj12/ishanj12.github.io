@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ngrokd Quickstart - Get Private Endpoints Accessible in Minutes</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <a href="index.html" class="logo">ngrokd</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="quickstart.html" style="color: var(--text-strong)">Quickstart</a></li>
+        <li><a href="index.html#configuration">Docs</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <h1>ngrokd Quickstart</h1>
+      <p class="tagline">Get private endpoints accessible on your machine in minutes</p>
+      <p>ngrokd is a forward proxy daemon that discovers your ngrok bound endpoints and creates local access points for them via mTLS.</p>
+    </section>
+
+    <section class="container section">
+      <h2>What you'll need</h2>
+      <ul>
+        <li>An ngrok account with an <a href="https://dashboard.ngrok.com/api" target="_blank">API key</a></li>
+        <li>Kubernetes bound endpoints created in the <a href="https://dashboard.ngrok.com/cloud-edge/endpoints" target="_blank">ngrok dashboard</a></li>
+        <li>Root/sudo access on your machine</li>
+      </ul>
+    </section>
+
+    <section class="container section">
+      <h2>1. Install ngrokd</h2>
+
+      <div class="tabs" data-group="qs-install">
+        <button class="tab" data-group="qs-install" data-tab="qs-install-macos" onclick="switchTab('qs-install','qs-install-macos')">macOS</button>
+        <button class="tab" data-group="qs-install" data-tab="qs-install-linux" onclick="switchTab('qs-install','qs-install-linux')">Linux</button>
+        <button class="tab" data-group="qs-install" data-tab="qs-install-docker" onclick="switchTab('qs-install','qs-install-docker')">Docker</button>
+      </div>
+
+      <div id="qs-install-macos" class="tab-content" data-group="qs-install">
+        <pre><code>curl -fsSL https://raw.githubusercontent.com/ngrok/ngrokd/main/install.sh | sudo bash</code></pre>
+      </div>
+
+      <div id="qs-install-linux" class="tab-content" data-group="qs-install">
+        <pre><code>curl -fsSL https://raw.githubusercontent.com/ngrok/ngrokd/main/install.sh | sudo bash</code></pre>
+      </div>
+
+      <div id="qs-install-docker" class="tab-content" data-group="qs-install">
+        <pre><code>docker pull ngrok/ngrokd:latest</code></pre>
+      </div>
+    </section>
+
+    <section class="container section">
+      <h2>2. Start the daemon</h2>
+
+      <div class="tabs" data-group="qs-start">
+        <button class="tab" data-group="qs-start" data-tab="qs-start-macos" onclick="switchTab('qs-start','qs-start-macos')">macOS</button>
+        <button class="tab" data-group="qs-start" data-tab="qs-start-linux" onclick="switchTab('qs-start','qs-start-linux')">Linux</button>
+        <button class="tab" data-group="qs-start" data-tab="qs-start-docker-virtual" onclick="switchTab('qs-start','qs-start-docker-virtual')">Docker (Virtual Mode)</button>
+        <button class="tab" data-group="qs-start" data-tab="qs-start-docker-network" onclick="switchTab('qs-start','qs-start-docker-network')">Docker (Network Mode)</button>
+      </div>
+
+      <div id="qs-start-macos" class="tab-content" data-group="qs-start">
+        <pre><code>sudo ngrokd install
+sudo ngrokd start</code></pre>
+      </div>
+
+      <div id="qs-start-linux" class="tab-content" data-group="qs-start">
+        <pre><code>sudo ngrokd install
+sudo ngrokd start</code></pre>
+      </div>
+
+      <div id="qs-start-docker-virtual" class="tab-content" data-group="qs-start">
+        <pre><code>docker run -d \
+  --name ngrokd \
+  --cap-add=NET_ADMIN \
+  -e NGROK_API_KEY=your_api_key \
+  -v ngrokd-data:/etc/ngrokd \
+  ngrok/ngrokd:latest</code></pre>
+      </div>
+
+      <div id="qs-start-docker-network" class="tab-content" data-group="qs-start">
+        <pre><code>docker run -d \
+  --name ngrokd \
+  --cap-add=NET_ADMIN \
+  -e NGROK_API_KEY=your_api_key \
+  -p 8081:8081 \
+  -p 80:80 \
+  -p 443:443 \
+  -v ngrokd-data:/etc/ngrokd \
+  ngrok/ngrokd:latest</code></pre>
+        <p style="margin-top: 1rem;"><em>Set <code>listen_interface: "0.0.0.0"</code> in config for network mode.</em></p>
+      </div>
+    </section>
+
+    <section class="container section">
+      <h2>3. Set your API key</h2>
+
+      <div class="tabs" data-group="qs-apikey">
+        <button class="tab" data-group="qs-apikey" data-tab="qs-apikey-native" onclick="switchTab('qs-apikey','qs-apikey-native')">macOS / Linux</button>
+        <button class="tab" data-group="qs-apikey" data-tab="qs-apikey-docker" onclick="switchTab('qs-apikey','qs-apikey-docker')">Docker</button>
+      </div>
+
+      <div id="qs-apikey-native" class="tab-content" data-group="qs-apikey">
+        <pre><code>ngrokctl set-api-key YOUR_NGROK_API_KEY</code></pre>
+      </div>
+
+      <div id="qs-apikey-docker" class="tab-content" data-group="qs-apikey">
+        <pre><code>docker exec ngrokd ngrokctl set-api-key YOUR_NGROK_API_KEY</code></pre>
+      </div>
+    </section>
+
+    <section class="container section">
+      <h2>4. Verify</h2>
+
+      <div class="tabs" data-group="qs-verify">
+        <button class="tab" data-group="qs-verify" data-tab="qs-verify-native" onclick="switchTab('qs-verify','qs-verify-native')">macOS / Linux</button>
+        <button class="tab" data-group="qs-verify" data-tab="qs-verify-docker" onclick="switchTab('qs-verify','qs-verify-docker')">Docker</button>
+      </div>
+
+      <div id="qs-verify-native" class="tab-content" data-group="qs-verify">
+        <pre><code>ngrokctl status
+ngrokctl list
+curl http://your-endpoint/</code></pre>
+      </div>
+
+      <div id="qs-verify-docker" class="tab-content" data-group="qs-verify">
+        <pre><code>docker exec ngrokd ngrokctl status
+docker exec ngrokd ngrokctl list
+curl -H "Host: your-endpoint" http://localhost:80/</code></pre>
+      </div>
+    </section>
+
+    <section class="container section">
+      <h2>5. Configure (optional)</h2>
+      <p>The configuration file is located at <code>/etc/ngrokd/config.yml</code>. Here's a minimal example:</p>
+      <pre><code>api:
+  key: ""  # Set via ngrokctl set-api-key
+
+bound_endpoints:
+  poll_interval: 30
+
+net:
+  listen_interface: virtual  # "virtual" or "0.0.0.0"
+  start_port: 9080
+
+server:
+  log_level: info
+  health_port: 8081</code></pre>
+    </section>
+
+    <section class="container section">
+      <h2>Next steps</h2>
+      <div class="feature-grid">
+        <a href="index.html" class="feature-card" style="text-decoration:none">
+          <div class="feature-icon">📖</div>
+          <h3>Full documentation</h3>
+          <p>Complete installation, usage, and troubleshooting guide.</p>
+        </a>
+        <a href="index.html#configuration" class="feature-card" style="text-decoration:none">
+          <div class="feature-icon">⚙️</div>
+          <h3>Configuration reference</h3>
+          <p>All configuration options and network modes explained.</p>
+        </a>
+        <a href="https://github.com/ngrok/ngrokd/blob/main/DOCKER.md" target="_blank" class="feature-card" style="text-decoration:none">
+          <div class="feature-icon">🐳</div>
+          <h3>Docker guide</h3>
+          <p>Detailed Docker deployment with virtual and network modes.</p>
+        </a>
+        <a href="https://github.com/ngrok/ngrokd" target="_blank" class="feature-card" style="text-decoration:none">
+          <div class="feature-icon">🔗</div>
+          <h3>GitHub</h3>
+          <p>Source code, issues, and contributions.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>ngrokd v0.3.6 | Based on the ngrok Kubernetes Operator connection protocol</p>
+      <p style="margin-top: 0.5rem;"><a href="https://github.com/ngrok/ngrokd">GitHub</a> | <a href="https://hub.docker.com/r/ngrok/ngrokd">Docker Hub</a></p>
+    </div>
+  </footer>
+
+  <script src="js/tabs.js"></script>
+</body>
+</html>
